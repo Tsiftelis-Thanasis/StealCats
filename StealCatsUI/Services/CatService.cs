@@ -12,13 +12,11 @@ namespace StealCatsUI.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<CatEntity>> GetCatsAsync()
+        public async Task<List<CatEntity>> GetCatsAsync(int page, int pageSize)
         {
             try
             {
-                //                var cats = await _httpClient.GetFromJsonAsync<List<CatEntity>>("api/cats?page=1&pageSize=10");
-
-                var cats = await _httpClient.GetFromJsonAsync<List<CatEntity>>("https://localhost:44350/api/cats?page=1&pageSize=10");
+                var cats = await _httpClient.GetFromJsonAsync<List<CatEntity>>($"api/cats?page={page}&pageSize={pageSize}");
 
                 return cats;
             }
@@ -26,6 +24,26 @@ namespace StealCatsUI.Services
             {
                 Console.WriteLine(e.Message);
                 return null;
+            }
+        }
+
+        public async Task<string> FetchCatsAsync() {
+            try
+            {
+                var response = await _httpClient.PostAsync("api/cats/fetch", null);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return "Cats fetched successfully";
+                }
+                else
+                {
+                    return $"Failed to fetch cats. Status code: {response.StatusCode}";
+                }
+            }
+            catch (Exception e)
+            {
+                return $"Error fetching cats: {e.Message}";
             }
         }
     }

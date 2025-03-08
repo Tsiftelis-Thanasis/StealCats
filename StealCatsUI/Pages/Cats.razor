@@ -5,25 +5,76 @@
 
 <h3>Gallery of Cats</h3>
 
-@if (cats == null)
+@if (_cats == null)
 {
     <p>Loading...</p>
 }
 else
 {
     <div class="cat-gallery">
-        @foreach (var cat in cats)
+        @foreach (var cat in _cats)
         {
-            <img src="@cat.image" alt="Cat Image" class="cat-image" />
+            <div class="cat-card">
+                <img src="@cat.image" alt="Cat Image" class="cat-image" />
+            </div>
         }
+    </div>
+
+    <div class="pagination">
+        <button @onclick="PreviousPage" disabled="@(_currentPage <= 1)">Previous</button>
+        <span>Page @_currentPage</span>
+        <button @onclick="NextPage" disabled="@(_cats.Count < _pageSize)">Next</button>
     </div>
 }
 
+<div class="controls">
+    <button @onclick="FetchNewCats">Fetch New Cats</button>
+    @if (!string.IsNullOrEmpty(_fetchResult))
+    {
+        <span>@_fetchResult</span>
+    }
+</div>
+
 @code {
-    private List<CatEntity> cats;
+    private List<CatEntity> _cats = new();
+    private int _currentPage = 1;
+    private int _pageSize = 4;
+    private string _fetchResult = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        cats = await CatService.GetCatsAsync();
+        await GetCats(_currentPage);
+    }
+
+    private async Task GetCats(int page)
+    {
+        _cats = await CatService.GetCatsAsync(page, _pageSize);
+        StateHasChanged();
+    }
+
+    private async Task FetchNewCats()
+    {
+        _fetchResult = await CatService.FetchCatsAsync();
+        StateHasChanged();
+
+        await Task.Delay(5000);
+
+        _fetchResult = string.Empty; 
+        StateHasChanged(); 
+    }
+
+    private async Task NextPage()
+    {
+        _currentPage++;
+        await GetCats(_currentPage);
+    }
+
+    private async Task PreviousPage()
+    {
+        if (_currentPage > 1)
+        {
+            _currentPage--;
+            await GetCats(_currentPage);
+        }
     }
 }
