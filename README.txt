@@ -64,13 +64,8 @@ curl -X 'POST' \
   -d ''
 Request URL
 http://localhost:5011/api/cats/fetch
-Server response
-Code	Details
-200	
 Response body
-Download
 {
-  "$id": "1",
   "message": "Cats fetched successfully."
 }
 
@@ -87,45 +82,50 @@ curl -X 'GET' \
   -H 'accept: */*'
 Request URL
 http://localhost:5011/api/cats?page=1&pageSize=10
-Server response
-Code	Details
-200	
 Response body
-Download
-{
-  "$id": "1",
-  "$values": [
-    {
-      "$id": "2",
-      "id": 1,
-      "catId": "ozEvzdVM-",
-      "width": 1200,
-      "height": 800,
-      "image": "https://cdn2.thecatapi.com/images/ozEvzdVM-.jpg",
-      "created": "2025-03-05T17:42:35.418727",
-      "tags": {
-        "$id": "3",
-        "$values": [
-          {
-            "$id": "4",
-            "id": 1,
-            "name": "Affectionate",
-            "created": "2025-03-05T17:42:35.5139402",
-            "cats": {
-              "$id": "5",
-              "$values": [
-                {
-                  "$ref": "2"
-                }
-              ]
-            }
-          },
-		  ...
-		  
-		}
-	}]
+[
+  {
+    "id": 1,
+    "catId": "ozEvzdVM-",
+    "width": 1200,
+    "height": 800,
+    "image": "https://cdn2.thecatapi.com/images/ozEvzdVM-.jpg",
+    "created": "2025-03-05T17:42:35.418727",
+    "tags": [
+      {
+        "id": 1,
+        "name": "Affectionate",
+        "created": "2025-03-05T17:42:35.5139402",
+        "cats": []
+      },
+      {
+        "id": 2,
+        "name": "Social",
+        "created": "2025-03-05T17:42:35.5255856",
+        "cats": []
+      },
+      {
+        "id": 3,
+        "name": "Intelligent",
+        "created": "2025-03-05T17:42:35.5324552",
+        "cats": []
+      },
+      {
+        "id": 4,
+        "name": "Playful",
+        "created": "2025-03-05T17:42:35.5394825",
+        "cats": []
+      },
+      {
+        "id": 5,
+        "name": "Active",
+        "created": "2025-03-05T17:42:35.5461128",
+        "cats": []
+      }
+    ]
+  }
 }
-
+]
 3. Get Cat by ID
 
 GET /api/cats/{id}
@@ -133,27 +133,20 @@ Gets a specific cat from DB by ID.
 
 Example:
 curl -X 'GET' \
-  'http://localhost:5011/api/cats/1' \
+  'http://localhost:5011/api/cats/100' \
   -H 'accept: */*'
 Request URL
-http://localhost:5011/api/cats/1
-Server response
-Code	Details
-200	
+http://localhost:5011/api/cats/100
 Response body
-Download
 {
-  "$id": "1",
-  "id": 1,
-  "catId": "ozEvzdVM-",
-  "width": 1200,
-  "height": 800,
-  "image": "https://cdn2.thecatapi.com/images/ozEvzdVM-.jpg",
-  "created": "2025-03-05T17:42:35.418727",
-  "tags": {
-    "$id": "2",
-    "$values": []
-  }
+  "id": 100,
+  "catId": "vVF7hE-Py",
+  "width": 1368,
+  "height": 855,
+  "image": "https://cdn2.thecatapi.com/images/vVF7hE-Py.jpg",
+  "created": "2025-03-08T20:58:38.7485134",
+  "tags": []
+}
   
 
 - Running Unit Tests
@@ -166,7 +159,7 @@ dotnet test
 Serilog, logs, can be found in the ..\StealCatsAPI\logs 
 
 
-- Running in Docker (pending)
+- Running in Docker (pending - cannot connect to DB)
 
 1. Build Docker Image
 
@@ -175,5 +168,8 @@ docker build -t stealcats-api .
 2. Run the Container
 
 docker run -p 5000:5000 -e "ConnectionStrings__DefaultConnection=Server=YOUR_SERVER;Database=CatDb;User Id=YOUR_USER;Password=YOUR_PASSWORD;" stealcats-api
+
+
+- Added Blazor webassembly UI to view Cats.
 
 
