@@ -20,8 +20,8 @@ namespace StealCatsServices.Services
         {
             _context = context;
             _httpClient = httpClient;
-            _logger = logger; 
-            
+            _logger = logger;
+
             _apiUrl = configuration["CaaSSettings:BaseUrl"];
             _apiKey = configuration["CaaSSettings:ApiKey"];
 
@@ -30,13 +30,12 @@ namespace StealCatsServices.Services
                 _logger.LogError("Api Url is empty, check the CaaS settings.");
                 throw new ArgumentNullException(nameof(_apiUrl));
             }
-            
+
             if (string.IsNullOrEmpty(_apiKey))
             {
                 _logger.LogError("Api Key is empty, check the CaaS settings.");
                 throw new ArgumentNullException(nameof(_apiKey));
             }
-
         }
 
         public async Task FetchCatsAsync()
@@ -81,7 +80,7 @@ namespace StealCatsServices.Services
                         };
                         _context.Cats.Add(catEntity);
                     }
-                    else 
+                    else
                         _logger.LogInformation($"Cat with id {cat.id} already exists.");
                 }
                 await _context.SaveChangesAsync();
@@ -122,7 +121,7 @@ namespace StealCatsServices.Services
 
                 if (cat == null)
                     _logger.LogWarning("Cat with ID {Id} not found.", id);
-                
+
                 return cat;
             }
             catch (Exception ex)

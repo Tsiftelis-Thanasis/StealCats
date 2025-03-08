@@ -1,9 +1,9 @@
-using Moq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Moq;
 using StealCatsAPI.Controllers;
-using StealCatsServices.Interfaces;
 using StealCatsModels;
+using StealCatsServices.Interfaces;
 
 namespace TestStealCats
 {
@@ -35,7 +35,7 @@ namespace TestStealCats
         }
 
         [Fact]
-        public async Task FetchCats_ReturnsError500()        
+        public async Task FetchCats_ReturnsError500()
         {
             // Arrange
             _mockCatService.Setup(s => s.FetchCatsAsync()).ThrowsAsync(new Exception("Test error!"));
@@ -47,7 +47,7 @@ namespace TestStealCats
             var objectResult = Assert.IsType<ObjectResult>(result);
             Assert.Equal(500, objectResult.StatusCode);
         }
-        
+
         [Fact]
         public async Task GetCats_ReturnsOk()
         {
@@ -91,7 +91,7 @@ namespace TestStealCats
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal(400, badRequestResult.StatusCode);
         }
-        
+
         [Fact]
         public async Task GetCats_ValidationCheck2()
         {
@@ -150,7 +150,7 @@ namespace TestStealCats
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             Assert.Equal(400, badRequestResult.StatusCode);
         }
-        
+
         [Fact]
         public async Task GetCatById_CatNotFound()
         {
@@ -165,7 +165,7 @@ namespace TestStealCats
             var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(404, notFoundResult.StatusCode);
         }
-        
+
         [Fact]
         public async Task GetCatById_ExceptionHandling()
         {

@@ -1,5 +1,5 @@
-﻿using System.Net.Http.Json;
-using StealCatsUI.Models;
+﻿using StealCatsUI.Models;
+using System.Net.Http.Json;
 
 namespace StealCatsUI.Services
 {
@@ -16,13 +16,11 @@ namespace StealCatsUI.Services
         {
             try
             {
-
-//                var cats = await _httpClient.GetFromJsonAsync<List<CatEntity>>("api/cats?page=1&pageSize=10");
+                //                var cats = await _httpClient.GetFromJsonAsync<List<CatEntity>>("api/cats?page=1&pageSize=10");
 
                 var cats = await _httpClient.GetFromJsonAsync<List<CatEntity>>("https://localhost:44350/api/cats?page=1&pageSize=10");
 
                 return cats;
-
             }
             catch (Exception e)
             {

@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using StealCatsModels;
 using StealCatsRepo.Context;
 using StealCatsServices.Interfaces;
 using StealCatsServices.Services;
-using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
