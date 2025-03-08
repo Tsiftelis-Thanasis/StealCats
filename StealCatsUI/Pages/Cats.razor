@@ -1,0 +1,29 @@
+﻿@page "/cats"
+@using StealCatsUI.Models
+@using StealCatsUI.Services
+@inject CatService CatService
+
+<h3>Gallery of Cats</h3>
+
+@if (cats == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="cat-gallery">
+        @foreach (var cat in cats)
+        {
+            <img src="@cat.image" alt="Cat Image" class="cat-image" />
+        }
+    </div>
+}
+
+@code {
+    private List<CatEntity> cats;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cats = await CatService.GetCatsAsync();
+    }
+}

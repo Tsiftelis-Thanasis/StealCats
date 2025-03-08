@@ -1,0 +1,6 @@
+@StealCatsAPI_HostAddress = https://localhost:7191
+
+GET {{StealCatsAPI_HostAddress}}/cats/
+Accept: application/json
+
+###
