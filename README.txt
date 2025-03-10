@@ -159,17 +159,15 @@ dotnet test
 Serilog, logs, can be found in the ..\StealCatsAPI\logs 
 
 
-- Running in Docker (pending - cannot connect to DB)
+- Docker
+I cannot build the docker. I have issue with the SQL server connection.
+Build:
+docker build -t stealcatsapi -f StealCatsAPI/Dockerfile .
 
-1. Build Docker Image
-
-docker build -t stealcats-api .
-
-2. Run the Container
-
-docker run -p 5000:5000 -e "ConnectionStrings__DefaultConnection=Server=YOUR_SERVER;Database=CatDb;User Id=YOUR_USER;Password=YOUR_PASSWORD;" stealcats-api
+Run:
+docker run -d -p 5000:80 stealcatsapi
 
 
-- Added Blazor webassembly UI to view Cats.
-
+- Blazor UI.
+Simple UI to check the Cats and also check that the API works as intended.
 

@@ -1,42 +1,37 @@
-# Use the official .NET 8 runtime as a base image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 8080
-
-# Build stage with SDK
+﻿# Build Stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy and restore projects
+# Copy project files
 COPY ["StealCatsAPI/StealCatsAPI.csproj", "StealCatsAPI/"]
 COPY ["StealCatsRepo/StealCatsRepo.csproj", "StealCatsRepo/"]
 COPY ["StealCatsModels/StealCatsModels.csproj", "StealCatsModels/"]
 COPY ["StealCatsServices/StealCatsServices.csproj", "StealCatsServices/"]
+
+# Restore dependencies
 RUN dotnet restore "StealCatsAPI/StealCatsAPI.csproj"
 
-# Copy all files
+# Copy all source files
 COPY . .
 
-# Build the application
-WORKDIR "/src/StealCatsAPI"
+# Build
+WORKDIR /src/StealCatsAPI
 RUN dotnet build -c Release -o /app/build
 
-# Install dotnet-ef tool
+# Install EF tools and add to PATH
 RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
 
-# Ensure the tool is available in the PATH
-ENV PATH="${PATH}:/root/.dotnet/tools"
+# 🚀 ✅ ONLY UPDATE THE DATABASE (Skip creating the migration)
+RUN dotnet ef database update --project /src/StealCatsRepo --startup-project /src/StealCatsAPI
 
-# Apply database migrations in the build stage (where .NET SDK is available)
-RUN dotnet ef database update --project /src/StealCatsAPI/StealCatsAPI.csproj --startup-project /src/StealCatsAPI/StealCatsAPI.csproj
+# Publish
+RUN dotnet publish -c Release -o /app/publish
 
-# Publish the application
-RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
-
-# Final runtime stage
-FROM base AS final
+# Runtime Stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# Start the application
+EXPOSE 80
 ENTRYPOINT ["dotnet", "StealCatsAPI.dll"]
